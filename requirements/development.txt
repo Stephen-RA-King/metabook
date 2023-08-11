@@ -95,13 +95,13 @@ comm==0.1.3
 commitizen==3.5.2
     # via -r development.in
 cookiecutter==2.1.1
-    # via cruft
-coverage[toml]==7.2.7
     # via
     #   -r development.in
     #   coverage-conditional-plugin
     #   pytest-cov
 coverage-conditional-plugin==0.9.0
+    # via cruft
+coverage[toml]==7.2.7
     # via -r development.in
 cruft==2.15.0
     # via -r development.in
