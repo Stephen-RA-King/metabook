@@ -164,4 +164,4 @@ cython_debug/
 # miscellaneous files
 *.tmp
 instructions.docx
-TODO.txt
+*.txt
