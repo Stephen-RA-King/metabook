@@ -47,5 +47,5 @@ loggers:
     propagate: False
 """
 
-logging.config.dictConfig(yaml.safe_load(LOGGING_CONFIG))
-logger = logging.getLogger("init")
+# logging.config.dictConfig(yaml.safe_load(LOGGING_CONFIG))
+# logger = logging.getLogger("init")
