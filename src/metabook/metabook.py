@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Core Library modules
 import os
 import re
@@ -124,3 +125,69 @@ def render_template(meta: dict[str, str]) -> str:
         if title_length <= config.TITLE_LEN_MAX:
             return config.TEMPLATE1.render(meta)
     return config.TEMPLATE2.render(meta)
+
+
+def sanitize_isbn(isbn_list: list[str]) -> list[str]:
+    """Cleans and sanitizes a list of ISBN (International Standard Book Number) strings.
+
+    Args:
+        isbn_list (List[str]): A list of ISBN strings that may contain non-numeric
+        characters.
+
+    Returns:
+        List[str]: A list of sanitized ISBN strings with non-numeric characters removed.
+                   Only ISBN strings with exactly 13 numeric characters are included.
+    """
+    sanitized_list = []
+    for isbn in isbn_list:
+        sanitized_isbn = re.sub(r"\D", "", isbn)
+        if len(sanitized_isbn) == 13:
+            sanitized_list.append(sanitized_isbn)
+    return sanitized_list
+
+
+def normalize_filename(name: str) -> str:
+    """Normalizes a given filename by removing invalid characters, replacing certain
+    characters, and applying additional formatting options based on configuration
+    settings.
+
+    Args:
+        name (str): The input filename to be normalized.
+
+    Returns:
+        str: The normalized filename.
+
+    Configuration Options:
+        - ALLOW_SPACE (bool): If False, replaces spaces with underscores.
+        - LOWERCASE_ONLY (bool): If True, converts the filename to lowercase.
+    """
+    name = "".join(c for c in name if c not in r'\/*?"<>|')
+    # name = name.title()
+    name = name.replace(":", "-")
+    if config.ALLOW_SPACE is False:
+        name = name.replace(" ", "_")
+    if config.LOWERCASE_ONLY is True:
+        name = name.lower()
+    return name
+
+
+def hardcopy(book: str, isbn_list: list, new_name: str) -> None:
+    """Writes information about a book to a 'hardcopy.txt' file.
+
+    Args:
+        book (str): The name or identifier of the original book.
+        isbn_list (list): A list of ISBNs associated with the book.
+        new_name (str): The new name or identifier for the book.
+
+    Returns:
+        None
+
+    Notes:
+        This function appends information about a book, such as ISBNs, the original
+        book name, and the new book name to a 'hardcopy.txt' file. It opens the file
+        in append mode, writes the information in a formatted manner, and closes the
+        file.
+    """
+    with open("hardcopy.txt", mode="a", encoding="utf-8") as f:
+        lines_to_write = f"{'*' * 90}\n{isbn_list}\nOld: {book}\nNew: {new_name}\n"
+        f.write(lines_to_write)
