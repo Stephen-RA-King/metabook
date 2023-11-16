@@ -223,3 +223,106 @@ def output(
     if no_isbn:
         print("isbn ids cannot be found")
         the_end()
+
+
+def text_block(string: str) -> str:
+    """Formats a string into text blocks based on a specified line length.
+
+    Args:
+        string (str): The input string to be formatted into text blocks.
+
+    Returns:
+        str: The formatted string with line breaks based on the configured line length.
+
+    Notes:
+        This function formats the input string into text blocks, ensuring that each line
+        does not exceed the configured line length (as specified in
+        'config.LINE_LENGTH'). It breaks the string into lines, adding line breaks
+        ('\n') to ensure that each line respects the maximum line length. The resulting
+        formatted string is returned.
+    """
+    result = []
+    final_result = ""
+    current_line = ""
+    words = string.split()
+    for word in words:
+        if len(current_line) + len(word) + 1 <= config.LINE_LENGTH:
+            current_line = "".join([current_line, " ", word])
+        else:
+            result.append(current_line)
+            current_line = word
+    if current_line:
+        result.append(current_line)
+    for line in result:
+        final_result = "".join([final_result, "\n", line])
+    return final_result.lstrip()
+
+
+def find_isbn_in_pdf(pdf_file: Path) -> list[str]:
+    """Extracts ISBNs from a PDF file using multiple regex patterns.
+
+    Args:
+        pdf_file (Path): The Path object representing the PDF file.
+
+    Returns:
+        List[str]: A list of ISBNs found in the PDF.
+
+    Note:
+        This function uses two regex patterns to search for ISBNs in the PDF.
+        It stops searching after a specified number of pages
+        (config.SEARCH_PAGES_ISBN).
+    """
+    isbn_list = []
+    pattern1 = re.compile(r"(?i)ISBN(?:-13)?\D*(\d(?:\W*\d){12})", re.M)
+    pattern2 = re.compile(
+        r"(?:ISBN(?:-13)?:? )?(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]"
+        r"{17}$)97[89][- ]?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9]",
+        re.M,
+    )
+
+    patterns = (pattern1, pattern2)
+    """
+    def get_isbn(pat):
+        isbns = []
+        try:
+            with pdfplumber.open(pdf_file) as pdf:
+                for count, page in enumerate(pdf.pages):
+                    print(f"page: {count}", end='')
+                    text = page.extract_text()
+                    matches = pat.findall(text)
+                    if matches:
+                        isbns.extend(matches)
+                        break
+                    if count > config.SEARCH_PAGES:
+                        break
+        except (ValueError, TypeError, KeyError):
+            print("An error has occurred whilst trying to find the ISBN")
+        return isbns
+    """
+
+    def get_isbn(pat) -> list[str]:  # type: ignore
+        isbns = []
+        try:
+            with open(pdf_file, "rb") as pdf:
+                pdf_reader = Reader(pdf)
+                num_pages = len(pdf_reader.pages)
+                for page_number in range(num_pages):
+                    page = pdf_reader.pages[page_number]
+                    text = page.extract_text()
+                    matches = pat.findall(text)
+                    if matches:
+                        isbns.extend(matches)
+                        break
+                    if page_number > config.SEARCH_PAGES_ISBN:
+                        break
+        except (ValueError, TypeError, KeyError, IndexError, PdfReadError):
+            print("An error has occurred whilst trying to find the ISBN")
+        return isbns
+
+    for index, pattern in enumerate(patterns):
+        print(f"using pattern {index + 1}")
+        isbn_list = get_isbn(pattern)
+        if isbn_list:
+            break
+
+    return isbn_list
