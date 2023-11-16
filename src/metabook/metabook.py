@@ -98,3 +98,29 @@ def write_metadata(book: Path, new_name: str) -> None:
         PdfWriter().write(book, pdf_reader)
     except (ValueError, AttributeError, PermissionError):
         print("An error occurred writing metadata")
+
+
+def render_template(meta: dict[str, str]) -> str:
+    """Renders a template based on metadata information.
+
+    Args:
+        meta (Dict[str, str]): A dictionary containing metadata information,
+            with keys such as 'SUBTITLE' and 'TITLE'.
+
+    Returns:
+        str: The rendered template as a string.
+
+    Notes:
+        This function checks the provided metadata for 'SUBTITLE' and 'TITLE'.
+        If 'SUBTITLE' is not 'None' and the combined length of 'TITLE' and 'SUBTITLE'
+        along with the extra characters (' + 3') does not exceed the maximum
+        title length specified in 'config.TITLE_LEN_MAX', it uses 'TEMPLATE1'
+        to render the template based on the metadata. If the conditions are not met,
+        it falls back to using 'TEMPLATE2' to render the template with the provided
+         metadata.
+    """
+    if meta["SUBTITLE"] != "None":
+        title_length = len(meta["TITLE"]) + len(meta["SUBTITLE"]) + 3
+        if title_length <= config.TITLE_LEN_MAX:
+            return config.TEMPLATE1.render(meta)
+    return config.TEMPLATE2.render(meta)
