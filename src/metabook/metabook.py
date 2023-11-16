@@ -41,3 +41,27 @@ def find_books(directory: Path) -> list[Path]:
         for file_path in directory_path.glob("*" + ".pdf"):
             matching_files.append(file_path)
     return matching_files
+
+
+def update_filename(book: Path, new_name: str) -> None:
+    """Updates the filename of a PDF file.
+
+    Args:
+        book (Path): The original path to the PDF file.
+        new_name (str): The new name for the PDF file (without extension).
+
+    Raises:
+        FileExistsError: If the file with the new name already exists.
+
+    Notes:
+        This function updates the filename of the provided PDF file by appending
+        '.pdf' to the new name. If the file with the updated name already exists,
+        it raises a FileExistsError and prints an error message indicating the
+        conflict.
+    """
+    new_name = "".join([new_name, ".pdf"])
+    new_path = book.with_name(new_name)
+    try:
+        book.rename(new_path)
+    except FileExistsError:
+        print(f"Cannot rename file. File: {new_name} already exists")
