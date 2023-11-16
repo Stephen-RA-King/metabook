@@ -65,3 +65,36 @@ def update_filename(book: Path, new_name: str) -> None:
         book.rename(new_path)
     except FileExistsError:
         print(f"Cannot rename file. File: {new_name} already exists")
+
+
+def write_metadata(book: Path, new_name: str) -> None:
+    """Writes metadata to a PDF file.
+
+    Args:
+        book (Path): The path to the PDF file.
+        new_name (str): The new title to set for the PDF.
+
+    Raises:
+        ValueError: If an issue occurs with the PDF value.
+        AttributeError: If an attribute error happens while updating metadata.
+        PermissionError: If permission-related issues occur while writing metadata.
+
+    Notes:
+        This function updates the metadata (Title, Subject, Author, Keywords, Creator,
+        Producer) of the provided PDF file with the new title. If any errors occur
+        during the process, it catches and prints an error message.
+    """
+    metadata = PdfDict(
+        Title=new_name,
+        Subject="",
+        Author="",
+        Keywords="",
+        Creator="",
+        Producer="",
+    )
+    try:
+        pdf_reader = PdfReader(book)
+        pdf_reader.Info.update(metadata)
+        PdfWriter().write(book, pdf_reader)
+    except (ValueError, AttributeError, PermissionError):
+        print("An error occurred writing metadata")
