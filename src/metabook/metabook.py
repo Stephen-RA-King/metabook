@@ -4,6 +4,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Third party modules
 import pdfplumber
@@ -191,3 +192,34 @@ def hardcopy(book: str, isbn_list: list, new_name: str) -> None:
     with open("hardcopy.txt", mode="a", encoding="utf-8") as f:
         lines_to_write = f"{'*' * 90}\n{isbn_list}\nOld: {book}\nNew: {new_name}\n"
         f.write(lines_to_write)
+
+
+def output(
+    old_name: Optional[str] = None,
+    skip: bool = False,
+    isbn_list: Optional[list[str]] = None,
+    new_name: Optional[str] = None,
+    no_meta: bool = False,
+    no_isbn: bool = False,
+) -> None:
+    """Generates output based on specified parameters."""
+
+    def the_end():  # type: ignore
+        print(f"{'*' * 90}")
+
+    if old_name:
+        print(f"processing: {old_name}")
+    if skip:
+        print("...skipping previously processed file")
+        the_end()
+    if isbn_list:
+        print(f"using isbns: {isbn_list}")
+    if new_name:
+        print(f"new name: {new_name}")
+        the_end()
+    if no_meta:
+        print("meta information cannot be found")
+        the_end()
+    if no_isbn:
+        print("isbn ids cannot be found")
+        the_end()
