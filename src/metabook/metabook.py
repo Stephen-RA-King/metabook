@@ -326,3 +326,150 @@ def find_isbn_in_pdf(pdf_file: Path) -> list[str]:
             break
 
     return isbn_list
+
+
+def publisher_find(book: Path) -> Optional[str]:
+    """Finds the publisher of a PDF book.
+
+    Args:
+        book (Path): The path to the PDF book.
+
+    Returns:
+        str: The found publisher's name, if identified.
+
+    Notes:
+        This function attempts to find the publisher of the provided PDF book.
+        It first checks if any known publishers' names are in the book's filename.
+        If not found, it searches through the text content of the book's pages
+        using pdfplumber, returning the first identified publisher.
+
+        If an error occurs during the search process, such as ValueError,
+        TypeError, or KeyError, it prints an error message indicating the issue.
+    """
+    for publisher in publishers:
+        if publisher in book.name:
+            return publisher
+    try:
+        with pdfplumber.open(book) as pdf:
+            for count, page in enumerate(pdf.pages):
+                text = page.extract_text()
+                for publisher in publishers:
+                    if publisher in text:
+                        return publisher
+                if count > config.SEARCH_PAGES_PUB:
+                    break
+    except (ValueError, TypeError, KeyError):
+        print("An error has occurred whilst trying to find the publisher")
+    return None
+
+
+def fetch_book_metadata(isbn: str) -> dict:
+    """Fetches book metadata from the Google Books API based on the provided ISBN.
+
+    Args:
+        isbn (str): The ISBN (International Standard Book Number) of the book.
+
+    Returns:
+        dict: A dictionary containing the fetched book metadata. The keys include:
+              - "TITLE": Title of the book.
+              - "SUBTITLE": Subtitle of the book (if available, otherwise "None").
+              - "AUTHORS": List of authors of the book.
+              - "DATE": Publication year of the book (first 4 characters of the full
+                date, or "None" if not available).
+              - "PUBLISHER": Publisher of the book, with possible mapping applied.
+              - "ISBN": The provided ISBN.
+
+    Note:
+        This function queries the Google Books API using the provided ISBN to
+        retrieve book metadata. The "PUBLISHER" field may undergo mapping based on
+        the `publisher_mapping` dictionary.
+    """
+    meta = {}
+    # url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}"
+    url = book_apis[config.API].format(isbn=isbn)
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            if "items" in data and len(data["items"]) > 0:
+                metadata = data["items"][0]["volumeInfo"]
+                if metadata:
+                    meta["TITLE"] = metadata.get("title", "None")
+                    meta["SUBTITLE"] = metadata.get("subtitle", "None")
+                    if config.GET_DESCRIPTION:
+                        meta["DESCRIPTION"] = text_block(
+                            metadata.get("description", "None")
+                        )
+                    meta["AUTHORS"] = metadata.get("authors", [])
+                    meta["DATE"] = metadata.get("publishedDate", "None")[:4]
+                    publisher = metadata.get("publisher", "None")
+                    if publisher in publisher_mapping:
+                        meta["PUBLISHER"] = publisher_mapping[publisher]
+                    else:
+                        meta["PUBLISHER"] = publisher
+                    meta["ISBN"] = isbn
+
+    except RequestException:
+        print("An error occurred whilst getting book metadata")
+    return meta
+
+
+def main():  # type: ignore
+    args, parser = _parse_args(sys.argv[1:])
+
+    if args.folder[0] == ".":
+        folder = Path(os.getcwd())
+    else:
+        folder = Path(args.folder[0])
+    if args.recurse:
+        config.RECURSE = True
+
+    print(folder)
+
+    if config.HARDCOPY_FILE.exists():
+        config.HARDCOPY_FILE.unlink()
+    try:
+        books: list[Path] = find_books(folder)
+        if books:
+            for book in books:
+                output(old_name=book.name)
+                if config.SKIP_EXISTING and book.name.startswith("["):
+                    output(skip=True)
+                    continue
+                else:
+                    isbn_numbers: list[str] = find_isbn_in_pdf(book)
+                    isbn_numbers = sanitize_isbn(isbn_numbers)
+                    if isbn_numbers:
+                        output(isbn_list=isbn_numbers)
+                        isbn_number: str = isbn_numbers[0]
+                        meta: dict[str, str] = fetch_book_metadata(isbn_number)
+                        if meta:
+                            if meta["PUBLISHER"] == "None":
+                                found_publisher = publisher_find(book)
+                                meta["PUBLISHER"] = (
+                                    found_publisher
+                                    if found_publisher is not None
+                                    else "None"
+                                )
+                            new_name: str = render_template(meta)
+                            new_name = normalize_filename(new_name)
+                            output(new_name=new_name)
+                            if config.HARDCOPY:
+                                hardcopy(book.name, isbn_numbers, new_name)
+                            if config.DRYRUN and meta:
+                                continue
+                            else:
+                                write_metadata(book, new_name)
+                                update_filename(book, new_name)
+                        else:
+                            output(no_meta=True)
+                    else:
+                        output(no_isbn=True)
+        else:
+            print("No books found")
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    SystemExit(main())
