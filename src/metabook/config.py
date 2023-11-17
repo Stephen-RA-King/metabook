@@ -13,7 +13,7 @@ class Config:
     DRYRUN: bool = False
     ENGINE: str = "PyPDF2"
     GET_DESCRIPTION: bool = False
-    HARDCOPY: bool = True
+    HARDCOPY: bool = False
     HARDCOPY_FILE: Path = Path("hardcopy.txt")
     LINE_LENGTH: int = 80
     LOWERCASE_ONLY: bool = False

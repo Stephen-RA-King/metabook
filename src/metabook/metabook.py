@@ -423,6 +423,12 @@ def main():  # type: ignore
         folder = Path(args.folder[0])
     if args.recurse:
         config.RECURSE = True
+    if args.all:
+        config.SKIP_EXISTING = False
+    if args.dryrun:
+        config.DRYRUN = True
+    if args.log:
+        config.HARDCOPY = True
 
     print(folder)
 
