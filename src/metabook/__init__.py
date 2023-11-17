@@ -8,7 +8,7 @@ from importlib.resources import as_file, files
 import yaml  # type: ignore
 
 __title__ = "metabook"
-__version__ = "0.1.0"
+__version__ = "0.0.0"
 __author__ = "Stephen R A King"
 __description__ = "rename and organize your pdf book collection"
 __email__ = "sking.github@gmail.com"
