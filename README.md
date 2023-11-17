@@ -1,6 +1,6 @@
 # metabook
 
-> Short blurb about what your product does.
+> Updates pdf book filenames and tags with book metadata for easier indexing.
 
 [![PyPI][pypi-image]][pypi-url]
 [![Downloads][downloads-image]][downloads-url]
@@ -26,7 +26,8 @@
 [![Pydough][pydough-image]][pydough-url]
 [![OpenSSFScorecard][openssf-image]][openssf-url]
 
-One to two paragraph statement about your product and what it does.
+Metabook is a simple to use CLI utility that searches for pdf files inside a directory then searches for ISBN numbers
+inside the files, gets the book metadata then updates the filename and meta tags inside the file.
 
 ![](assets/header_dough.png)
 
@@ -34,16 +35,10 @@ One to two paragraph statement about your product and what it does.
 
 ---
 
-OS X & Linux:
+Metabook is best installed with pipx
 
 ```sh
-pip3 install metabook
-```
-
-Windows:
-
-```sh
-pip install metabook
+pipx install metabook
 ```
 
 ## Usage example
