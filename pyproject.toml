@@ -79,7 +79,7 @@ upload_to_pypi = true
 upload_to_repository = true
 remove_dist = true
 version_source = "tag"
-commit_message = "chore: generate by PSR"
+commit_message = "chore: publish with PSR"
 
 [tool.flakeheaven]
 # base = "https://raw.githubusercontent.com/flakeheaven/flakeheaven/main/pyproject.toml"
