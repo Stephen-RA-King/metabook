@@ -65,10 +65,10 @@ pip install --editable metabook
 
 [**Read the Docs**](https://metabook.readthedocs.io/en/latest/)
 
--   [**Example Usage**](https://metabook.readthedocs.io/en/latest/example.html)
--   [**Credits**](https://metabook.readthedocs.io/en/latest/example.html)
--   [**Changelog**](https://metabook.readthedocs.io/en/latest/changelog.html)
--   [**API Reference**](https://metabook.readthedocs.io/en/latest/autoapi/index.html)
+- [**Example Usage**](https://metabook.readthedocs.io/en/latest/example.html)
+- [**Credits**](https://metabook.readthedocs.io/en/latest/example.html)
+- [**Changelog**](https://metabook.readthedocs.io/en/latest/changelog.html)
+- [**API Reference**](https://metabook.readthedocs.io/en/latest/autoapi/index.html)
 
 [**Wiki**](https://github.com/Stephen-RA-King/metabook/wiki)
 
