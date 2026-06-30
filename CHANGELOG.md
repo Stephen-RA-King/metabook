@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2023-11-17)
+
+### Fix
+
+* Dependencies in setup.cfg ([`c76b124`](https://github.com/Stephen-RA-King/metabook/commit/c76b124b6b16f66346d234469d59a8c87e835ba0))
+
 ## v0.1.0 (2023-11-17)
 
 ### Feature
