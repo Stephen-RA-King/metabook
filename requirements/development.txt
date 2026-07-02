@@ -4,6 +4,8 @@
 #
 #    pip-compile development.in
 #
+--index-url https://pkgs.safetycli.com/repository/none-4c687/pypi/simple/
+
 alabaster==1.0.0
     # via sphinx
 annotated-doc==0.0.4
@@ -108,7 +110,7 @@ cookiecutter==2.7.1
     #   pytest-cov
 coverage-conditional-plugin==0.9.0
     # via cruft
-coverage[toml]==7.14.3
+coverage[toml]==7.15.0
     # via -r development.in
 cruft==2.16.0
     # via -r development.in
@@ -643,7 +645,7 @@ sqlalchemy==2.0.51
     # via jupyter-cache
 stack-data==0.6.3
     # via ipython
-stevedore==5.8.0
+stevedore==5.9.0
     # via bandit
 tabulate==0.10.0
     # via jupyter-cache
@@ -695,7 +697,7 @@ typer==0.26.8
     # via cruft
 types-requests==2.33.0.20260518
     # via -r development.in
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   beautifulsoup4
     #   jupyter-client

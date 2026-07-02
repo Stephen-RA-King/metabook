@@ -4,6 +4,8 @@
 #
 #    pip-compile test.in
 #
+--index-url https://pkgs.safetycli.com/repository/none-4c687/pypi/simple/
+
 ast-serialize==0.6.0
     # via mypy
 attrs==26.1.0
@@ -19,7 +21,7 @@ colorama==0.4.6
     #   bandit
     #   click
     #   pytest
-coverage[toml]==7.14.3
+coverage[toml]==7.15.0
     # via pytest-cov
 flake8==7.3.0
     # via
@@ -133,7 +135,7 @@ rich==15.0.0
     # via bandit
 snowballstemmer==3.1.1
     # via pydocstyle
-stevedore==5.8.0
+stevedore==5.9.0
     # via bandit
 types-beautifulsoup4==4.12.0.20250516
     # via -r test.in
@@ -153,7 +155,7 @@ types-urllib3==1.26.25.14
     # via -r test.in
 types-webencodings==0.5.0.20260408
     # via types-html5lib
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via mypy
 urllib3==2.7.0
     # via types-requests
