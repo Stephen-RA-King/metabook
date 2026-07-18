@@ -1,5 +1,3 @@
-# metabook
-
 > Updates pdf book filenames and tags with book metadata for easier indexing.
 
 [![PyPI][pypi-image]][pypi-url]
@@ -29,7 +27,7 @@
 Metabook is a simple to use CLI utility that searches for pdf files inside a directory then searches for ISBN numbers
 inside the files, gets the book metadata then updates the filename and meta tags inside the file.
 
-![](assets/header_dough.png)
+![](assets/metabook.png)
 
 ## Installation
 

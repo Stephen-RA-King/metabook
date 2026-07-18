@@ -9,6 +9,7 @@ from typing import Optional
 # Third party modules
 import pdfplumber
 import requests
+from dotenv import load_dotenv
 from pdfrw import PdfDict, PdfReader, PdfWriter
 from PyPDF2 import PdfReader as Reader
 from PyPDF2.errors import PdfReadError
@@ -20,8 +21,12 @@ from .config import config
 from .publishers import publisher_mapping, publishers
 
 book_apis = {
-    "google": "https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}",
+    "google": "https://www.googleapis.com/books/v1/volumes",
 }
+
+load_dotenv()
+if config.API == "google":
+    api_key = os.getenv("GOOGLE_BOOKS_API_KEY")
 
 
 def find_books(directory: Path) -> list[Path]:
@@ -129,14 +134,14 @@ def render_template(meta: dict[str, str]) -> str:
 
 
 def sanitize_isbn(isbn_list: list[str]) -> list[str]:
-    """Cleans and sanitizes a list of ISBN (International Standard Book Number) strings.
+    """Cleans and sanitises a list of ISBN (International Standard Book Number) strings.
 
     Args:
         isbn_list (List[str]): A list of ISBN strings that may contain non-numeric
         characters.
 
     Returns:
-        List[str]: A list of sanitized ISBN strings with non-numeric characters removed.
+        List[str]: A list of sanitised ISBN strings with non-numeric characters removed.
                    Only ISBN strings with exactly 13 numeric characters are included.
     """
     sanitized_list = []
@@ -148,15 +153,15 @@ def sanitize_isbn(isbn_list: list[str]) -> list[str]:
 
 
 def normalize_filename(name: str) -> str:
-    """Normalizes a given filename by removing invalid characters, replacing certain
+    """Normalises a given filename by removing invalid characters, replacing certain
     characters, and applying additional formatting options based on configuration
     settings.
 
     Args:
-        name (str): The input filename to be normalized.
+        name (str): The input filename to be normalised.
 
     Returns:
-        str: The normalized filename.
+        str: The normalised filename.
 
     Configuration Options:
         - ALLOW_SPACE (bool): If False, replaces spaces with underscores.
@@ -320,7 +325,6 @@ def find_isbn_in_pdf(pdf_file: Path) -> list[str]:
         return isbns
 
     for index, pattern in enumerate(patterns):
-        print(f"using pattern {index + 1}")
         isbn_list = get_isbn(pattern)
         if isbn_list:
             break
@@ -385,10 +389,10 @@ def fetch_book_metadata(isbn: str) -> dict:
         the `publisher_mapping` dictionary.
     """
     meta = {}
-    # url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}"
-    url = book_apis[config.API].format(isbn=isbn)
+    base_url = book_apis[config.API]
+    params = {"q": f"isbn:{isbn}", "key": api_key}
     try:
-        response = requests.get(url, timeout=5)
+        response = requests.get(base_url, params=params, timeout=10)
         if response.status_code == 200:
             data = response.json()
             if "items" in data and len(data["items"]) > 0:
@@ -408,7 +412,8 @@ def fetch_book_metadata(isbn: str) -> dict:
                     else:
                         meta["PUBLISHER"] = publisher
                     meta["ISBN"] = isbn
-
+        else:
+            print(f"Error {response.status_code}: {response.reason}")
     except RequestException:
         print("An error occurred whilst getting book metadata")
     return meta
@@ -429,8 +434,6 @@ def main():  # type: ignore
         config.DRYRUN = True
     if args.log:
         config.HARDCOPY = True
-
-    print(folder)
 
     if config.HARDCOPY_FILE.exists():
         config.HARDCOPY_FILE.unlink()
