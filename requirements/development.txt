@@ -40,18 +40,18 @@ babel==2.18.0
     #   sphinx
 bandit==1.9.4
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   flake8-bandit
 beautifulsoup4==4.15.0
     # via nbconvert
 binaryornot==0.6.0
     # via cookiecutter
 black==26.5.1
-    # via -r requirements/development.in
-bleach==6.4.0
+    # via -r development.in
+bleach[css]==6.4.0
     # via nbconvert
 build==1.5.0
-    # via -r requirements/development.in
+    # via -r development.in
 cachetools==7.1.6
     # via tox
 certifi==2026.7.22
@@ -62,6 +62,7 @@ certifi==2026.7.22
 cffi==2.1.0
     # via
     #   argon2-cffi-bindings
+    #   cryptography
     #   pynacl
 cfgv==3.5.0
     # via pre-commit
@@ -81,33 +82,28 @@ click-option-group==0.5.9
     # via python-semantic-release
 colorama==0.4.6
     # via
-    #   -r requirements/development.in
-    #   bandit
-    #   build
-    #   click
+    #   -r development.in
     #   commitizen
-    #   ipython
-    #   pytest
-    #   sphinx
     #   tox
-    #   typer
 comm==0.2.3
     # via
     #   ipykernel
     #   ipywidgets
 commitizen==4.16.5
-    # via -r requirements/development.in
+    # via -r development.in
 cookiecutter==2.7.1
     # via cruft
-coverage==7.15.2
+coverage[toml]==7.15.2
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   coverage-conditional-plugin
     #   pytest-cov
 coverage-conditional-plugin==0.9.0
-    # via -r requirements/development.in
+    # via -r development.in
 cruft==2.16.0
-    # via -r requirements/development.in
+    # via -r development.in
+cryptography==50.0.0
+    # via secretstorage
 debugpy==1.8.21
     # via ipykernel
 decli==0.6.3
@@ -143,7 +139,7 @@ filelock==3.32.0
     #   virtualenv
 flake8==7.3.0
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   flake8-bandit
     #   flake8-bugbear
     #   flake8-comprehensions
@@ -152,26 +148,26 @@ flake8==7.3.0
     #   flake8-simplify
     #   pep8-naming
 flake8-bandit==4.1.1
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-bugbear==25.11.29
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-comprehensions==3.17.0
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-docstrings==1.7.0
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-html==0.4.3
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-plugin-utils==1.3.3
     # via flake8-pytest-style
 flake8-pytest-style==2.2.0
-    # via -r requirements/development.in
+    # via -r development.in
 flake8-simplify==0.30.0
-    # via -r requirements/development.in
+    # via -r development.in
 fqdn==1.5.1
     # via jsonschema
 gitdb==4.0.12
     # via gitpython
-gitpython==3.1.57
+gitpython==3.1.58
     # via
     #   cruft
     #   python-semantic-release
@@ -204,7 +200,7 @@ importlib-resources==6.5.2
 iniconfig==2.3.0
     # via pytest
 invoke==3.0.3
-    # via -r requirements/development.in
+    # via -r development.in
 ipykernel==7.3.0
     # via
     #   jupyter
@@ -224,7 +220,7 @@ ipywidgets==8.1.8
 isoduration==20.11.0
     # via jsonschema
 isort==8.0.1
-    # via -r requirements/development.in
+    # via -r development.in
 jaraco-classes==3.4.0
     # via keyring
 jaraco-context==6.1.2
@@ -233,6 +229,10 @@ jaraco-functools==4.6.0
     # via keyring
 jedi==0.20.0
     # via ipython
+jeepney==0.9.0
+    # via
+    #   keyring
+    #   secretstorage
 jinja2==3.1.6
     # via
     #   commitizen
@@ -251,7 +251,7 @@ json5==0.15.0
     # via jupyterlab-server
 jsonpointer==3.1.1
     # via jsonschema
-jsonschema==4.26.0
+jsonschema[format-nongpl]==4.26.0
     # via
     #   jupyter-events
     #   jupyterlab-server
@@ -259,7 +259,7 @@ jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
     # via jsonschema
 jupyter==1.1.1
-    # via -r requirements/development.in
+    # via -r development.in
 jupyter-builder==1.1.1
     # via
     #   jupyterlab
@@ -312,14 +312,14 @@ jupyterlab-widgets==3.0.16
     # via ipywidgets
 keyring==25.7.0
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   twine
 lark==1.3.1
     # via rfc3987-syntax
 librt==0.13.0
     # via mypy
 lxml==6.1.1
-    # via -r requirements/development.in
+    # via -r development.in
 markdown-it-py==4.2.0
     # via
     #   mdit-py-plugins
@@ -346,13 +346,13 @@ more-itertools==11.1.0
     #   jaraco-classes
     #   jaraco-functools
 mypy==2.3.0
-    # via -r requirements/development.in
+    # via -r development.in
 mypy-extensions==1.1.0
     # via
     #   black
     #   mypy
 myst-nb==1.4.0
-    # via -r requirements/development.in
+    # via -r development.in
 myst-parser==5.1.0
     # via myst-nb
 nbclient==0.11.0
@@ -409,7 +409,9 @@ pathspec==1.1.1
     #   black
     #   mypy
 pep8-naming==0.15.1
-    # via -r requirements/development.in
+    # via -r development.in
+pexpect==4.9.0
+    # via ipython
 platformdirs==4.11.0
     # via
     #   black
@@ -425,7 +427,7 @@ pluggy==1.6.0
 pprintpp==0.4.0
     # via pytest-clarity
 pre-commit==4.6.1
-    # via -r requirements/development.in
+    # via -r development.in
 prometheus-client==0.26.0
     # via jupyter-server
 prompt-toolkit==3.0.53
@@ -438,6 +440,10 @@ psutil==7.2.2
     # via
     #   ipykernel
     #   ipython
+ptyprocess==0.7.0
+    # via
+    #   pexpect
+    #   terminado
 pure-eval==0.2.3
     # via stack-data
 pycodestyle==2.14.0
@@ -464,14 +470,14 @@ pygments==2.20.0
     #   rich
     #   sphinx
 pynacl==1.6.2
-    # via -r requirements/development.in
+    # via -r development.in
 pyproject-api==1.11.0
     # via tox
 pyproject-hooks==1.2.0
     # via build
 pytest==9.1.1
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   pytest-clarity
     #   pytest-cov
     #   pytest-html
@@ -482,23 +488,23 @@ pytest==9.1.1
     #   pytest-tldr
     #   pytest-xdist
 pytest-clarity==1.0.1
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-cov==7.1.0
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-html==4.2.0
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-metadata==3.1.1
     # via pytest-html
 pytest-randomly==4.1.0
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-repeat==0.9.4
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-timeout==2.4.0
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-tldr==0.2.6
-    # via -r requirements/development.in
+    # via -r development.in
 pytest-xdist==3.8.0
-    # via -r requirements/development.in
+    # via -r development.in
 python-dateutil==2.9.0.post0
     # via
     #   arrow
@@ -512,21 +518,14 @@ python-gitlab==8.5.0
 python-json-logger==4.1.0
     # via jupyter-events
 python-semantic-release==10.6.1
-    # via -r requirements/development.in
+    # via -r development.in
 python-slugify==8.0.4
     # via cookiecutter
 pytokens==0.4.1
     # via black
-pywin32-ctypes==0.2.3
-    # via keyring
-pywinpty==3.0.5
-    # via
-    #   jupyter-server
-    #   jupyter-server-terminals
-    #   terminado
 pyyaml==6.0.3
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   bandit
     #   commitizen
     #   cookiecutter
@@ -553,7 +552,7 @@ referencing==0.37.0
     #   jupyter-events
 requests==2.34.2
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   cookiecutter
     #   jupyterlab-server
     #   python-gitlab
@@ -591,6 +590,8 @@ rpds-py==2026.6.3
     # via
     #   jsonschema
     #   referencing
+secretstorage==3.5.0
+    # via keyring
 send2trash==2.1.0
     # via jupyter-server
 shellingham==1.5.4
@@ -611,16 +612,16 @@ soupsieve==2.9.1
     # via beautifulsoup4
 sphinx==9.1.0
     # via
-    #   -r requirements/development.in
+    #   -r development.in
     #   myst-nb
     #   myst-parser
     #   sphinx-autoapi
     #   sphinx-rtd-theme
     #   sphinxcontrib-jquery
 sphinx-autoapi==3.8.0
-    # via -r requirements/development.in
+    # via -r development.in
 sphinx-rtd-theme==3.1.0
-    # via -r requirements/development.in
+    # via -r development.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
 sphinxcontrib-devhelp==2.0.0
@@ -668,7 +669,7 @@ tornado==6.5.7
     #   notebook
     #   terminado
 tox==4.58.0
-    # via -r requirements/development.in
+    # via -r development.in
 traitlets==5.15.1
     # via
     #   ipykernel
@@ -686,11 +687,11 @@ traitlets==5.15.1
     #   nbconvert
     #   nbformat
 twine==7.0.0
-    # via -r requirements/development.in
+    # via -r development.in
 typer==0.27.0
     # via cruft
 types-requests==2.33.0.20260712
-    # via -r requirements/development.in
+    # via -r development.in
 typing-extensions==4.16.0
     # via
     #   beautifulsoup4
@@ -718,7 +719,7 @@ virtualenv==21.7.0
     #   pre-commit
     #   tox
 watchdog==6.0.0
-    # via -r requirements/development.in
+    # via -r development.in
 wcwidth==0.8.2
     # via prompt-toolkit
 webcolors==25.10.0
