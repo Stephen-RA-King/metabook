@@ -37,12 +37,12 @@ repos:
         stages: [commit-msg]
 
   - repo: https://github.com/pycqa/isort
-    rev: 9.0.0b1
+    rev: 9.0.0b2
     hooks:
       - id: isort
         args: ["--filter-files"]
 
-  - repo: https://github.com/psf/black
+  - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.5.1
     hooks:
       - id: black
