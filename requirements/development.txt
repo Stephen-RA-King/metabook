@@ -168,7 +168,7 @@ fqdn==1.6.0
     # via jsonschema
 gitdb==4.0.12
     # via gitpython
-gitpython==3.2.0
+gitpython==3.2.1
     # via
     #   cruft
     #   python-semantic-release
@@ -354,7 +354,7 @@ nbclient==0.11.0
     #   jupyter-cache
     #   myst-nb
     #   nbconvert
-nbconvert==7.17.1
+nbconvert==7.17.2
     # via
     #   jupyter
     #   jupyter-server
@@ -651,7 +651,7 @@ tomlkit==0.15.1
     # via
     #   commitizen
     #   python-semantic-release
-tornado==6.5.10
+tornado==6.6rc1
     # via
     #   ipykernel
     #   jupyter-client
